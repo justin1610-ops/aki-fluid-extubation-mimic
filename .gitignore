@@ -1,0 +1,8 @@
+# Never commit MIMIC-IV data or outputs
+*.csv
+*.parquet
+*.pkl
+results/
+data/
+__pycache__/
+.venv/
