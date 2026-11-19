@@ -314,13 +314,17 @@ def main():
                 "all_stays_pct": float(dd[flag].mean() * 100),
                 "early_deaths": {q: [int(g.loc[g["D48"] == 1, flag].sum()), int((g["D48"] == 1).sum())] for q, g in dd.groupby("Q")},
                 "survivors_pct": float(dd.loc[~dead, flag].mean() * 100)}
+            summ[flag]["all_stays_by_quartile_pct"] = {q: float(g[flag].mean() * 100) for q, g in dd.groupby("Q")}
         R["code_status"] = summ
-        if "cmo_by_extubation" in dd.columns:
-            keep = dd.loc[dd["cmo_by_extubation"] == 0, "stay_id"]
-            sub = cc[cc["stay_id"].isin(keep)]
-            R["excluding_cmo_by_extubation"] = {"n": len(sub),
-                                                "Y_quartiles": quartile_ors(logit(sub, "Y", QT)),
-                                                "YD_quartiles": quartile_ors(logit(sub, "YD", QT))}
+        for flag in ["cmo_by_extubation", "dnr_dni_or_cmo_by_extubation"]:
+            if flag in dd.columns:
+                keep = dd.loc[dd[flag] == 0, "stay_id"]
+                sub = cc[cc["stay_id"].isin(keep)]
+                R[f"excluding_{flag}"] = {
+                    "n": len(sub),
+                    "early_death_pct_by_quartile": {q: float(g["D48"].mean() * 100) for q, g in sub.groupby("Q")},
+                    "Y_quartiles": quartile_ors(logit(sub, "Y", QT)),
+                    "YD_quartiles": quartile_ors(logit(sub, "YD", QT))}
 
     # Tables and figures
     table1(d).to_csv(out / "table1.csv", index=False)
