@@ -45,7 +45,7 @@ Expected cohort size: 25,199 ICU stays from 21,907 patients (25,012 with complet
 - **Primary outcome:** no new invasive ventilation episode within 48 h after the end of the first episode in the same ICU stay.
 - **Secondary outcome:** primary outcome and alive at 48 h after extubation.
 - **Models:** logistic regression adjusted for age, sex, first-day SOFA, body weight, maximum AKI stage within 48 h, and RRT within 48 h; complete-case analysis.
-- **Code status:** charted "Code Status" entries (`icu.chartevents`) and provider "Code status" orders (`hosp.poe_detail`). Comfort measures only (CMO) and any treatment limitation (DNR, DNI, or CMO) are flagged when documented up to 6 h after the end of the first invasive ventilation episode. These flags are summarized by quartile, and the quartile models are refitted after excluding flagged stays.
+- **Code status:** charted "Code Status" entries during the ICU stay (`icu.chartevents`) and provider "Code status" orders during the hospitalization (`hosp.poe_detail`). `any_code_status_documented` has no time limit. Comfort measures only (CMO) and any treatment limitation (DNR, DNI, or CMO) are flagged when documented at any time up to 6 h after the end of the first invasive ventilation episode; timing relative to death is not assessed. These flags are summarized by quartile, and the quartile models are refitted after excluding flagged stays.
 
 ## Notes
 
